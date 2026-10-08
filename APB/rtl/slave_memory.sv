@@ -1,41 +1,18 @@
-// --- 1. The LFSR Module (Generates the random sequence) ---
-module LFSR4 (
-    input  logic       clk,
-    input  logic       rst_n,
-    output logic [3:0] lfsr_o
+module Memory(
+    input logic        clk,
+    input logic        rst_n,
+
+    // Request from APB Slave
+    input logic        req_i,
+    input logic        rnw_i,
+    input logic [3:0]  addr_i,
+    input logic [31:0] wdata_i,
+
+    // Response to APB Slave
+    output logic       ready_o,
+    output logic [31:0] rdata_o
 );
-    logic [3:0] lfsr_q;
-    logic       feedback;
 
-    // XOR taps at bit 3 and 2
-    assign feedback = lfsr_q[3] ^ lfsr_q[2];
-
-    always_ff @(posedge clk or negedge rst_n) begin
-        if (!rst_n) begin
-            lfsr_q <= 4'b0001; // Never initialize to 0
-        end 
-        else begin
-            lfsr_q <= {lfsr_q[2:0], feedback}; // Shift left and append feedback
-        end
-    end
-
-    assign lfsr_o = lfsr_q;
-endmodule
-
-
-// --- 2. Memory Slave Module ---
-module MemoryInterfaceSlave(
-	input logic clk,            
-	input logic rst_n,
-	
-	input logic        req_i,       // read/write request from master
-	input logic        req_rnw_i,   // 0 = Write, 1 = Read
-	input logic [3:0]  req_addr_i,  // address from master 
-	input logic [31:0] req_wdata_i, // data to write
-	output logic       req_ready_o, // slave to master - ready to transfer
-	output logic [31:0] req_rdata_o // data to read from slave
-);
- 
 	typedef enum logic [1:0] {
 		IDLE,
 		WAIT_STATE, 
