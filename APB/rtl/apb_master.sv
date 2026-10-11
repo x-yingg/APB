@@ -11,6 +11,9 @@ module APB_Master(
     output logic [31:0] rdata_o,
     output logic        valid_o,
 
+    // Interface to the FIFO
+    output logic       fifo_ready_o,
+
     // Interface to the APB Slave
     input logic         pready_i,
     input logic [31:0]  prdata_i,
@@ -49,6 +52,7 @@ module APB_Master(
 
             rdata_o       <= 32'b0;
             valid_o       <= 1'b0;
+
         end
         else begin
             current_state <= next_state;
@@ -94,6 +98,8 @@ module APB_Master(
         pwrite_o   = ~rnw_reg;
         pwdata_o   = wdata_reg;
 
+        fifo_ready_o = 1'b0;
+
         case (current_state)
 
             // ----------------------------------------------------
@@ -104,6 +110,8 @@ module APB_Master(
                 if (req_i) begin
                     next_state = SETUP;
                 end
+
+                fifo_ready_o = 1'b1; // Ready to accept a new request
 
             end
 

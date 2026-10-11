@@ -17,6 +17,7 @@ module FIFO #(
 
     // 1. Storage
     logic [DATA_W-1:0] mem [0:DEPTH-1]; // depth - how many room, data - how much space each room
+
     // 2. Pointers
     logic [$clog2(DEPTH)-1:0] write_ptr; 
     //ceiling of the base-2 logarith - eg. if Depth is 4, need 2 bits (0-3), log2(4) = 2, get [1:0]
@@ -29,14 +30,16 @@ module FIFO #(
     assign full_o  = (count == DEPTH);
     assign empty_o = (count == 0);
 
-    // 5. Sequential logic
-   always_ff @(posedge clk or negedge rst_n)
+    // 5. Output data
+    assign pop_data_o = mem[read_ptr];
+
+    // 6. Sequential logic
+   always_ff @(posedge clk or negedge rst_n) begin
 
         if (!rst_n) begin
             write_ptr <= 0;
             read_ptr  <= 0;
             count     <= 0;
-            pop_data_o <= 0;
         end
 
         else begin
@@ -53,7 +56,6 @@ module FIFO #(
 
             // POP
             if (pop_i && !empty_o) begin
-                pop_data_o <= mem[read_ptr];
 
                 if (read_ptr == DEPTH-1)
                     read_ptr <= 0;

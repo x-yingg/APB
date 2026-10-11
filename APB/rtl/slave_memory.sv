@@ -53,8 +53,8 @@ module Memory(
 			end
 			
 			// Memory Write 
-			if (current_state == WAIT_STATE && wait_count == 0 && req_rnw_i == 1'b0) begin
-				mem[req_addr_i] <= req_wdata_i;
+			if (current_state == WAIT_STATE && wait_count == 0 && rnw_i == 1'b0) begin
+				mem[addr_i] <= wdata_i;
 			end
 		end
 	end
@@ -63,8 +63,8 @@ module Memory(
 	always_comb begin
 		// Default assignments to prevent latches
 		next_state  = current_state;
-		req_ready_o = 0;
-		req_rdata_o = 0;
+		ready_o = 0;
+		rdata_o = 0;
 		
 		case(current_state)
 			IDLE: begin
@@ -80,11 +80,11 @@ module Memory(
 			end
 					
 			RESPOND: begin
-				req_ready_o = 1;
+				ready_o = 1;
 				
 				// If it is a read transaction, drive the output data
-				if (req_rnw_i == 1'b1) begin
-					req_rdata_o = mem[req_addr_i]; 
+				if (rnw_i == 1'b1) begin
+					rdata_o = mem[addr_i]; 
 				end
 				
 				next_state = IDLE;

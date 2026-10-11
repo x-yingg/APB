@@ -40,15 +40,15 @@ module APB_Slave (
 
     // --- DAY 17 INSTANTIATION ---
     
-    MemoryInterfaceSlave day17_memory (
-        .clk         (clk),
-        .rst_n       (rst_n),
-        .req_i       (mem_req),
-        .req_rnw_i   (mem_rnw),
-        .req_addr_i  (mem_addr),
-        .req_wdata_i (mem_wdata),
-        .req_ready_o (mem_ready),
-        .req_rdata_o (mem_rdata)
+    Memory memoryinterface (
+        .clk     (clk),
+        .rst_n   (rst_n),
+        .req_i   (mem_req),
+        .rnw_i   (mem_rnw),
+        .addr_i  (mem_addr),
+        .wdata_i (mem_wdata),
+        .ready_o (mem_ready),
+        .rdata_o (mem_rdata)
     );
 
 endmodule

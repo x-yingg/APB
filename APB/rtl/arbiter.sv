@@ -1,4 +1,4 @@
-module arbiter (
+module Arbiter (
     input  logic read_i,
     input logic write_i,
 
