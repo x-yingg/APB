@@ -65,7 +65,7 @@ module APB_System (
     // 3. FIFO input
     // --------------------------------
 
-    assign fifo_push_data = {addr_i, arb_rnw, wdata_i};
+    assign fifo_push_data = {addr_i, ~write_i, wdata_i};
     assign fifo_push = arb_valid && !fifo_full;
 
 
