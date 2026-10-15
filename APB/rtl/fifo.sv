@@ -1,6 +1,6 @@
 module FIFO #(
   parameter DEPTH  = 4,
-  parameter DATA_W = 4
+  parameter DATA_W = 65
 )(
   input  logic             clk,
   input  logic             rst_n,
