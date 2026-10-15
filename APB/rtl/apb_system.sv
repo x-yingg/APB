@@ -48,29 +48,16 @@ module APB_System (
     logic        slave_ready;
     logic [31:0] slave_rdata;
 
-
     // --------------------------------
-    // 2. Arbiter
-    // --------------------------------
-
-    Arbiter u_arbiter (
-        .read_i  (read_i),
-        .write_i (write_i),
-        .valid_o (arb_valid),
-        .rnw_o   (arb_rnw)
-    );
-
-
-    // --------------------------------
-    // 3. FIFO input
+    // 2. FIFO input
     // --------------------------------
 
     assign fifo_push_data = {addr_i, ~write_i, wdata_i};
-    assign fifo_push = arb_valid && !fifo_full;
-
+    assign fifo_push = (read_i || write_i) && !fifo_full;
+    
 
     // --------------------------------
-    // 4. FIFO
+    // 3. FIFO
     // --------------------------------
 
     FIFO #(
@@ -89,7 +76,7 @@ module APB_System (
 
 
     // --------------------------------
-    // 5. FIFO output -> APB Master
+    // 4. FIFO output -> APB Master
     // --------------------------------
 
     assign {master_addr, master_rnw, master_wdata}
@@ -100,7 +87,7 @@ module APB_System (
 
 
     // --------------------------------
-    // 6. APB Master
+    // 5. APB Master
     // --------------------------------
 
     APB_Master u_master (
