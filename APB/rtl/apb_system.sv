@@ -27,9 +27,6 @@ module APB_System (
 
     localparam int REQ_W = 65;
 
-    logic arb_valid;
-    logic arb_rnw;
-
     logic [REQ_W-1:0] fifo_push_data;
     logic [REQ_W-1:0] fifo_pop_data;
 
@@ -52,7 +49,7 @@ module APB_System (
     // 2. FIFO input
     // --------------------------------
 
-    assign fifo_push_data = {addr_i, ~write_i, wdata_i};
+    assign fifo_push_data = {addr_i, ~write_i, wdata_i}; // will perform write only if both high
     assign fifo_push = (read_i || write_i) && !fifo_full;
     
 
